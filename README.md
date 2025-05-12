@@ -1,3 +1,4 @@
+
 # Description
 
 You are given a solution that contains a Blazor Web App with a Customer model class.
@@ -40,3 +41,62 @@ Extra (nice to have)
 
 Optional
 - Blazor UI framework
+
+
+# PrintName Task
+To satisfy the task of printing the name of an Employee or Manager, I created two approaches:
+
+### 1. Reflection
+```csharp
+public static class PersonPrinter
+{
+    public static void PrintName(object person)
+    {
+        var type = person.GetType();
+        var nameProperty = type.GetProperty("Name");
+
+        if (nameProperty != null && nameProperty.PropertyType == typeof(string))
+        {
+            var name = nameProperty.GetValue(person) as string;
+            Console.WriteLine($"Name: {name}");
+        }
+        else
+        {
+            Console.WriteLine("The provided object does not have a valid 'Name' property.");
+        }
+    }
+}
+
+
+PersonPrinter.PrintName(employee);
+PersonPrinter.PrintName(manager);
+```
+
+### 2. Inheritance / Interface
+```csharp
+public interface IPerson
+{
+    string Name { get; }
+}
+
+public class Employee : IPerson
+{
+    public string Name { get; set; }
+}
+
+public class Manager : IPerson
+{
+    public string Name { get; set; }
+}
+
+public static class PersonPrinter
+{
+    public static void PrintName(IPerson person)
+    {
+        Console.WriteLine($"Name: {person.Name}");
+    }
+}
+
+```
+
+> You can find the source in `BlazorApp.Shared\Services\PersonPrinter.cs`
