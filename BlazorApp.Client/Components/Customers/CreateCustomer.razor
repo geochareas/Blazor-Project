@@ -1,0 +1,46 @@
+﻿@page "/customers/create"
+@rendermode InteractiveAuto
+
+@using BlazorApp.Shared.Services
+
+@inject ICustomerService CustomerService
+@inject NavigationManager Navigation
+
+
+<h3>Create Customer</h3>
+
+<RadzenTemplateForm Data="@customer" TItem="Customer" Submit="@OnSubmit">
+    <RadzenFieldset Text="Customer Info">
+
+        <RadzenTextBox Name="CompanyName" @bind-Value="customer.CompanyName" Placeholder="Company Name" Style="width: 100%;" />
+        <RadzenRequiredValidator Component="CompanyName" Text="Company Name is required" />
+
+        <RadzenTextBox Name="ContactName" @bind-Value="customer.ContactName" Placeholder="Contact Name" Style="width: 100%;" />
+
+        <RadzenTextBox Name="Address" @bind-Value="customer.Address" Placeholder="Address" Style="width: 100%;" />
+        <RadzenTextBox Name="City" @bind-Value="customer.City" Placeholder="City" Style="width: 100%;" />
+        <RadzenTextBox Name="Region" @bind-Value="customer.Region" Placeholder="Region" Style="width: 100%;" />
+        <RadzenTextBox Name="PostalCode" @bind-Value="customer.PostalCode" Placeholder="Postal Code" Style="width: 100%;" />
+        <RadzenTextBox Name="Country" @bind-Value="customer.Country" Placeholder="Country" Style="width: 100%;" />
+        <RadzenTextBox Name="Phone" @bind-Value="customer.Phone" Placeholder="Phone" Style="width: 100%;" />
+
+        <RadzenButton ButtonType="ButtonType.Submit" Text="Create" Style="margin-top: 1rem;" Icon="add_circle" />
+        <RadzenButton Text="Cancel" ButtonStyle="ButtonStyle.Light" Style="margin-top: 1rem; margin-left: 1rem;" Click="@Cancel" />
+    </RadzenFieldset>
+</RadzenTemplateForm>
+
+@code {
+    private Customer customer = new();
+
+    private async Task OnSubmit()
+    {
+        await CustomerService.AddAsync(customer);
+        Navigation.NavigateTo("/customers");
+    }
+
+    private void Cancel()
+    {
+        Navigation.NavigateTo("/customers");
+    }
+}
+

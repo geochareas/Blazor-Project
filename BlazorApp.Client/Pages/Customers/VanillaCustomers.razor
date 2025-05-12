@@ -1,0 +1,28 @@
+﻿@page "/customers-vanilla"
+@rendermode InteractiveAuto
+
+@using BlazorApp.Client.Components.Customers
+
+@inject NavigationManager Navigation
+
+
+<h3>Customer List with Vanilla Blazor and Bootstrap CSS</h3>
+
+<VanillaCustomersGrid Page="page" />
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "page")]
+    public int page { get; set; } = 1;
+
+    protected override Task OnParametersSetAsync()
+    {
+        // Ensure the default page is set when it's not passed in the URL
+        if (page == 0)
+        {
+            page = 1;  // Default to 1 if no page is passed in the URL
+        }
+
+        return base.OnParametersSetAsync();
+    }
+}

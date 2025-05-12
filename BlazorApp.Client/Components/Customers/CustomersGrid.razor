@@ -1,0 +1,75 @@
+﻿@using BlazorApp.Shared.Models
+@using BlazorApp.Shared.Services
+
+@inject ICustomerService CustomerService
+@inject NavigationManager Navigation
+
+@rendermode InteractiveAuto
+
+<RadzenDataGrid TItem="Customer" Data="@Customers" Count="@TotalCount"
+                LoadData="@LoadCustomers" Pageable="true" PageSize="10" AllowPaging="true"
+                Responsive="true" ShowPagingSummary="true" ColumnWidth="150px">
+    <HeaderTemplate>
+        <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Add New Customer" Click="@CreateCustomer" />
+    </HeaderTemplate>
+
+    <Columns>
+        <RadzenDataGridColumn TItem="Customer" Property="CompanyName" Title="Company" />
+        <RadzenDataGridColumn TItem="Customer" Property="ContactName" Title="Contact" />
+        <RadzenDataGridColumn TItem="Customer" Property="Address" Title="Address" />
+        <RadzenDataGridColumn TItem="Customer" Property="City" Title="City" />
+        <RadzenDataGridColumn TItem="Customer" Property="Region" Title="Region" />
+        <RadzenDataGridColumn TItem="Customer" Property="PostalCode" Title="Postal Code" />
+        <RadzenDataGridColumn TItem="Customer" Property="Country" Title="Country" />
+        <RadzenDataGridColumn TItem="Customer" Property="Phone" Title="Phone" />
+
+        <RadzenDataGridColumn TItem="Customer" Title="Actions" Frozen="true" FrozenPosition="FrozenColumnPosition.Right">
+            <Template Context="customer">
+                <RadzenButton Icon="edit" Style="margin-right: 10px" Click="@(() => EditCustomer(customer.Id))" />
+                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@(() => DeleteCustomer(customer.Id))" />
+            </Template>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>
+
+@code {
+    private IEnumerable<Customer> Customers = [];
+    private int TotalCount;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await CustomerService.GetPagedAsync(1, 10);
+        Customers = result?.Items ?? [];
+        TotalCount = result?.TotalCount ?? 0;
+    }
+
+
+    private async Task LoadCustomers(LoadDataArgs args)
+    {
+        var page = (args.Skip / args.Top) + 1;
+        var pageSize = args.Top ?? 10;
+
+        var result = await CustomerService.GetPagedAsync(page ?? 1, pageSize);
+        Customers = result?.Items ?? [];
+        TotalCount = result?.TotalCount ?? 0;
+    }
+
+    private void CreateCustomer()
+    {
+        Navigation.NavigateTo("/customers/create");
+    }
+
+    private void EditCustomer(string id)
+    {
+        Navigation.NavigateTo($"/customers/edit/{id}");
+    }
+
+    private async Task DeleteCustomer(string id)
+    {
+
+        await CustomerService.DeleteAsync(id);
+        Customers = Customers!.Where(c => c.Id != id).ToList();
+
+    }
+
+}

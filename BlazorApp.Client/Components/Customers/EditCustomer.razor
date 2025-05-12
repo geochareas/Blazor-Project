@@ -1,0 +1,61 @@
+﻿@page "/customers/edit/{Id}"
+@rendermode InteractiveAuto
+
+@using BlazorApp.Shared.Services
+
+@inject ICustomerService CustomerService
+@inject NavigationManager Navigation
+
+<h3>Edit Customer</h3>
+
+@if (customer == null)
+{
+    <RadzenProgressBar ProgressBarStyle="ProgressBarStyle.Primary" Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
+}
+else
+{
+    <RadzenTemplateForm TItem="Customer" Data="@customer" Submit="@UpdateCustomer">
+        <RadzenFieldset Text="Customer Info">
+
+            <RadzenTextBox Name="CompanyName" @bind-Value="customer.CompanyName" Placeholder="Company Name" Style="width: 100%;" />
+            <RadzenRequiredValidator Component="CompanyName" Text="Company Name is required" />
+
+            <RadzenTextBox Name="ContactName" @bind-Value="customer.ContactName" Placeholder="Contact Name" Style="width: 100%;" />
+            <RadzenTextBox Name="Address" @bind-Value="customer.Address" Placeholder="Address" Style="width: 100%;" />
+            <RadzenTextBox Name="City" @bind-Value="customer.City" Placeholder="City" Style="width: 100%;" />
+            <RadzenTextBox Name="Region" @bind-Value="customer.Region" Placeholder="Region" Style="width: 100%;" />
+            <RadzenTextBox Name="PostalCode" @bind-Value="customer.PostalCode" Placeholder="Postal Code" Style="width: 100%;" />
+            <RadzenTextBox Name="Country" @bind-Value="customer.Country" Placeholder="Country" Style="width: 100%;" />
+            <RadzenTextBox Name="Phone" @bind-Value="customer.Phone" Placeholder="Phone" Style="width: 100%;" />
+
+            <RadzenButton ButtonType="ButtonType.Submit" Text="Create" Style="margin-top: 1rem;" Icon="save" />
+            <RadzenButton Text="Cancel" ButtonStyle="ButtonStyle.Light" Style="margin-top: 1rem; margin-left: 1rem;" Click="@Cancel" />
+        </RadzenFieldset>
+    </RadzenTemplateForm>
+}
+
+@code {
+    [Parameter] 
+    public string id { get; set; } = default!;
+    
+    private Customer? customer;
+
+    protected override async Task OnInitializedAsync()
+    {
+        customer = await CustomerService.GetByIdAsync(id);
+    }
+
+    private async Task UpdateCustomer()
+    {
+        if (customer is not null)
+        {
+            await CustomerService.UpdateAsync(customer);
+            Navigation.NavigateTo("/customers");
+        }
+    }
+
+    private void Cancel()
+    {
+        Navigation.NavigateTo("/customers");
+    }
+}
