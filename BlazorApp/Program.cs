@@ -39,6 +39,7 @@ app.UseIdentityServer();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseExceptionHandler();
 app.MapControllers();
 
 app.MapRazorComponents<App>()

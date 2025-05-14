@@ -19,6 +19,7 @@ public static class DependencyInjection
     {
         services.AddHttpClient();
         services.AddControllers();
+        services.AddProblemDetails();
 
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();

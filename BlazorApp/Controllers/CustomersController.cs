@@ -26,7 +26,10 @@ public class CustomersController : ControllerBase
     {
         if (page <= 0 || pageSize <= 0)
         {
-            return BadRequest("Page and pageSize must be greater than zero.");
+            return Problem(
+                title: "Invalid pagination parameters",
+                detail: "Page and pageSize must be greater than zero.",
+                statusCode: StatusCodes.Status400BadRequest);
         }
 
         var result = await _repository.GetPagedAsync(page, pageSize, cancellationToken);
@@ -41,7 +44,10 @@ public class CustomersController : ControllerBase
         var customer = await _repository.GetByIdAsync(id, cancellationToken);
         if (customer is null)
         {
-            return NotFound();
+            return Problem(
+                title: "Customer Not Found",
+                detail: $"Customer with ID '{id}' was not found.",
+                statusCode: StatusCodes.Status404NotFound);
         }
 
         return Ok(customer);
@@ -52,7 +58,10 @@ public class CustomersController : ControllerBase
     {
         if (customer is null)
         {
-            return BadRequest("CustomerDto cannot be null.");
+            return Problem(
+                title: "Invalid Request",
+                detail: "Customer cannot be null.",
+                statusCode: StatusCodes.Status400BadRequest);
         }
 
         if (string.IsNullOrWhiteSpace(customer.Id))
@@ -70,7 +79,10 @@ public class CustomersController : ControllerBase
     {
         if (id != customer.Id)
         {
-            return BadRequest("ID mismatch between route and body.");
+            return Problem(
+                title: "ID Mismatch",
+                detail: "ID mismatch between route and body.",
+                statusCode: StatusCodes.Status400BadRequest);
         }
 
         await _repository.UpdateAsync(customer, cancellationToken);
