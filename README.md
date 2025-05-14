@@ -106,6 +106,8 @@ public static class PersonPrinter
 ![screenshot_2](https://github.com/user-attachments/assets/79e6b0cf-e267-48f6-bd81-8f3e88fbb9ac)
 ![screenshot_3](https://github.com/user-attachments/assets/e6402f70-0d2c-4277-a4ba-268136f65d9c)
 ![screenshot_4](https://github.com/user-attachments/assets/41e51ee4-0377-4ebd-a9e3-c3727dfd8183)
+![image](https://github.com/user-attachments/assets/0ff8322a-6bfd-4bbc-b206-5c91b24e9b60)
+
 
 
 
