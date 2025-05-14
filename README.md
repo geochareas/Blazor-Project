@@ -99,7 +99,7 @@ public static class PersonPrinter
 
 ```
 
-> You can find the source in `BlazorApp.Shared\Services\PersonPrinter.cs`
+> You can find the source in `PersonPrinter.cs`
 
 # Screenshots
 ![screenshot_1](https://github.com/user-attachments/assets/90f7c8f5-07b3-4990-bcff-f784af82ae76)
